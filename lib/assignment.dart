@@ -1,8 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/assignmentBody.dart';
+import 'dart:async'; 
+import 'dart:convert'; 
+import 'package:http/http.dart' as http; 
+import 'Classes/AssignmentModel.dart';
 
-class Assignment extends StatelessWidget {
+
+
+class Assignment extends StatefulWidget {
   const Assignment({super.key});
+
+  @override
+  State<Assignment> createState() => _AssignmentState();
+}
+
+class _AssignmentState extends State<Assignment> {
+
+  String _responseText = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    final response = await http.get(Uri.parse('http://192.168.9.72:3000/assignments'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _responseText = response.body;
+      });
+    } else {
+      setState(() {
+        _responseText = 'Error fetching data';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +68,7 @@ class Assignment extends StatelessWidget {
                               color: Colors.white,
                               width: double.infinity,
                               padding: const EdgeInsets.all(15),
-                              child: Column(children: const [
+                              child: Column(children:[
                                 Text(
                                 'CVThèque',
                                 textAlign: TextAlign.center,
@@ -44,8 +78,8 @@ class Assignment extends StatelessWidget {
                                 ),
                               ),
                               // ignore: unnecessary_const
-                              const Text(
-                                'Assignment mini description',
+                               Text(
+                                _responseText,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: 14,
@@ -253,4 +287,5 @@ class Assignment extends StatelessWidget {
           ),
         ));
   }
+
 }
