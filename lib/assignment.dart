@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/assignmentBody.dart';
 
 class Assignment extends StatelessWidget {
   const Assignment({super.key});
@@ -10,7 +11,6 @@ class Assignment extends StatelessWidget {
         body: SingleChildScrollView(
           child: Center(
             child: Column(
-              
               children: [
                 //Assignment
                 GestureDetector(
@@ -18,7 +18,7 @@ class Assignment extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (BuildContext context) {
-                              return const Assignment();
+                              return const AssinmentBody();
                             },
                           ),
                         );
@@ -66,7 +66,7 @@ class Assignment extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (BuildContext context) {
-                              return const Assignment();
+                              return const AssinmentBody();
                             },
                           ),
                         );
