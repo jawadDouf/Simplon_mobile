@@ -18,274 +18,89 @@ class _AssignmentState extends State<Assignment> {
 
   String _responseText = 'Loading...';
 
+   List<AssignmentModel> assignmentsList = [];
+
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    getAssignments();
   }
 
-  Future<void> _fetchData() async {
-    final response = await http.get(Uri.parse('http://192.168.9.72:3000/assignments'));
+  List<AssignmentModel> parseAssignmentModels(String responseBody) { 
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>(); 
+   return parsed.map<AssignmentModel>((json) => AssignmentModel.fromMap(json)).toList(); 
+} 
+  Future<List<AssignmentModel>> fetchAssignments() async { 
+   final response = await http.get(Uri.parse('http://192.168.9.72:3000/assignments.json')); 
+   if (response.statusCode == 200) { 
+         return parseAssignmentModels(response.body);         
+   } else { 
+      throw Exception('Unable to fetch assifnments'); 
+   } 
 
-    if (response.statusCode == 200) {
-      setState(() {
-        _responseText = response.body;
-      });
-    } else {
-      setState(() {
-        _responseText = 'Error fetching data';
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                //Assignment
-                GestureDetector(
-                  onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const AssinmentBody();
-                            },
-                          ),
-                        );
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 90,
-                      margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Image.asset('images/Assinment.webp'),
-                            Container(
-                              color: Colors.white,
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(15),
-                              child: Column(children:[
-                                Text(
-                                'CVThèque',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // ignore: unnecessary_const
-                               Text(
-                                _responseText,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              ],)
-                            ),
-                          ],
-                        )
-                      )),
-                ),
-                  
-                  
-                //Assignment
-                GestureDetector(
-                  onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const AssinmentBody();
-                            },
-                          ),
-                        );
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 90,
-                      margin: const EdgeInsets.only(bottom: 15),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Image.asset('images/Assignment.jpeg'),
-                            Container(
-                              color: Colors.white,
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(15),
-                              child: Column(children: const [
-                                Text(
-                                'CVThèque',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // ignore: unnecessary_const
-                              const Text(
-                                'Assignment mini description',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              ],)
-                            ),
-                          ],
-                        )
-                      )),
-                ),
-                  
-                  
-                //Assignment
-                GestureDetector(
-                  onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const Assignment();
-                            },
-                          ),
-                        );
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 90,
-                      margin: const EdgeInsets.only(bottom: 15),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Image.asset('images/Assignment.jpeg'),
-                            Container(
-                              color: Colors.white,
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(15),
-                              child: Column(children: const [
-                                Text(
-                                'CVThèque',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // ignore: unnecessary_const
-                              const Text(
-                                'Assignment mini description',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              ],)
-                            ),
-                          ],
-                        )
-                      )),
-                ),
-                //Assignment
-                GestureDetector(
-                  onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const Assignment();
-                            },
-                          ),
-                        );
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 90,
-                      margin: const EdgeInsets.only(bottom: 15),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Image.asset('images/Assignment.jpeg'),
-                            Container(
-                              color: Colors.white,
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(15),
-                              child: Column(children: const [
-                                Text(
-                                'CVThèque',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // ignore: unnecessary_const
-                              const Text(
-                                'Assignment mini description',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              ],)
-                            ),
-                          ],
-                        )
-                      )),
-                ),
-                  
-                    
-                //Assignment
-                GestureDetector(
-                  onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const Assignment();
-                            },
-                          ),
-                        );
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 90,
-                      margin: const EdgeInsets.only(bottom: 15),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Image.asset('images/Assignment.jpeg'),
-                            Container(
-                              color: Colors.white,
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(15),
-                              child: Column(children: const [
-                                Text(
-                                'CVThèque',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // ignore: unnecessary_const
-                              const Text(
-                                'Assignment mini description',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              ],)
-                            ),
-                          ],
-                        )
-                      )),
-                )
-              ],
-            ),
-          ),
-        ));
-  }
-
+  
 }
+  void getAssignments() async {
+    List<AssignmentModel> fetchedAssignments = await fetchAssignments();
+    setState(() {
+      assignmentsList = fetchedAssignments;
+    });
+  }
+
+  Widget build(BuildContext context) {
+  return ListView.builder(
+    itemCount: assignmentsList.length,
+    itemBuilder: (BuildContext context, int index) {
+      return Card(
+        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 45),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return const AssinmentBody();
+                },
+              ),
+            );
+          },
+          child: Column(
+            children: [
+              Image.asset('images/Assignment.webp'),
+              Container(
+                color: Colors.white,
+                width: double.infinity,
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    Text(
+                      assignmentsList[index].name.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      assignmentsList[index].description.toString(),
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+   
+   
+  }
+
