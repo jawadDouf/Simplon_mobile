@@ -58,14 +58,14 @@ class _AssignmentState extends State<Assignment> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return const AssinmentBody();
+                  return  AssinmentBody(oneAssignment: assignmentsList[index]);
                 },
               ),
             );
           },
           child: Column(
             children: [
-              Image.asset('images/Assignment.webp'),
+              Image.asset('images/${assignmentsList[index].image}'),
               Container(
                 color: Colors.white,
                 width: double.infinity,
