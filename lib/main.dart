@@ -1,93 +1,81 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart'; 
 import 'dart:async'; 
 import 'dart:convert'; 
 import 'package:http/http.dart' as http; 
+import 'package:firebase_core/firebase_core.dart';
 
 import 'home_page.dart';
+import 'login.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MaterialApp(
-    home: const MyStateFulWidget()
-    ));
-
+    home: const MyStatefulWidget(),
+  ));
 }
 
-
-// class Home extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-    
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Simplon.co mobile"),
-//         centerTitle: true,
-//         backgroundColor: Colors.red[900],
-//       ),
-//        body: Center(
-//           child: ElevatedButton(
-//             onPressed: () {},
-//             child : Text("Login"),
-//             style: TextButton.styleFrom(
-//             backgroundColor: Colors.red,
-//             fixedSize: const Size(350, 40)
-//             ),
-//           )
-//     ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {  },
-//         child: Text('click'),
-//       ),
-//     );
-//   }
-
-// }
-
-class MyStateFulWidget extends StatefulWidget {
-  const MyStateFulWidget({super.key});
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key}) : super(key: key);
 
   @override
-  State<MyStateFulWidget> createState() => _MyStateFulWidgetState();
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
-class _MyStateFulWidgetState extends State<MyStateFulWidget> {
-
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int buttonText = 1;
   int currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-       appBar: AppBar(
-            title: Text("Simplon.co mobile"),
-            centerTitle: true,
-            backgroundColor: Colors.red[900],
-       ),
-       body: HomePage(),
-       bottomNavigationBar:  
-        NavigationBar(destinations: const [
-           NavigationDestination(icon: Icon(Icons.home) , label: 'Home'),
-           NavigationDestination(icon: Icon(Icons.list) , label: 'MyBriefs'),
-       ],
-        onDestinationSelected: (int index) {
-            setState(() {
-              currentPage = index;
-            });
+      appBar: AppBar(
+        title: const Text("Simplon.co mobile"),
+        centerTitle: true,
+        backgroundColor: Colors.red[900],
+      ),
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomePage();
+          } else {
+            return const Login();
+          }
         },
-        selectedIndex: currentPage ,
-       ),
-       
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          FirebaseAuth.instance.signOut();
+        },
+        child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: NavigationBar(
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+          NavigationDestination(icon: Icon(Icons.list), label: 'MyBriefs'),
+        ],
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPage = index;
+          });
+        },
+        selectedIndex: currentPage,
+      ),
     );
   }
 }
 
 class RootWidget extends StatefulWidget {
-  const RootWidget({super.key});
+  const RootWidget({Key? key}) : super(key: key);
 
   @override
-  State<RootWidget> createState() => _RootWidget();
+  State<RootWidget> createState() => _RootWidgetState();
 }
 
-class _RootWidget extends State<RootWidget> {
+class _RootWidgetState extends State<RootWidget> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
