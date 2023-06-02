@@ -1,4 +1,5 @@
-# new_app
+# Simplon mobile
+This is mobile version of Simplon.co
 
 A new Flutter project.
 
